@@ -1,0 +1,63 @@
+{
+  "head": {
+    "name": "head",
+    "type": "Action",
+    "message": "Хотите начать квест?",
+    "answers": {
+      "1": {
+        "text": "Да",
+        "next_node": "node_1"
+      },
+      "2": {
+        "text": "Нет",
+        "next_node": "node_2"
+      },
+      "3": {
+        "text": "Хочу ввести пароль",
+        "next_node": "node_password"
+      }
+    },
+    "help": "Введите номер своего решения",
+    "advice": "Согласитесь, оно того стоит"
+  },
+  "node_password": {
+    "name": "password_node",
+    "type": "Password",
+    "message": "Перед собой вы видите огромную металлическую дверь.\nЧтобы открыть ещё, необходимо ввести пароль.",
+    "right_password": "125",
+    "next_node": "node_1",
+    "prev_node": "head",
+    "help": "Если в данный момент не знаете пароль, то введите \"отмена\"",
+    "advice": ""
+  },
+  "node_1": {
+    "name": "node_1",
+    "type": "Action",
+    "message": "Отлично",
+    "answers": {
+      "1": {
+        "text": "...",
+        "next_node": "null"
+      }
+    },
+    "help": "",
+    "advice": ""
+  },
+  "node_2": {
+    "name": "node_2",
+    "type": "Action",
+    "message": "Очень жаль",
+    "answers": {
+      "1": {
+        "text": "Ok",
+        "next_node": "null"
+      },
+      "2": {
+        "text": "Передумать",
+        "next_node": "node_1"
+      }
+    },
+    "help": "",
+    "advice": ""
+  }
+}

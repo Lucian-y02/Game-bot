@@ -1,0 +1,2 @@
+TOKEN = "5399541908:AAFpf9aHEYn0vRKC1cCKiZEzB4CSqNn4wj4"
+LINK = "t.me/Project_B_2022_bot"
