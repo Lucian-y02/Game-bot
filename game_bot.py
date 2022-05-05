@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class GameBot:
 
     def __init__(self, name="chapter_1"):
-        self.quest_run = True
+        self.quest_run = False
         self.chapter_data = dict()
         self.updater = Updater(TOKEN)
         self.dp = self.updater.dispatcher
@@ -43,6 +43,7 @@ class GameBot:
         }
 
     def start(self, update, context):
+        self.quest_run = True
         save_number = "0"
         update.message.reply_text("Квест начинается!")
         if len(update.message.text.split()) == 2:
@@ -58,8 +59,15 @@ class GameBot:
         self.show_node = True
         self.give_command(update, context)
 
+    def get_inventory(self, update, context):
+        list_things = '\n'.join(self.inventory)
+        update.message.reply_text(f"Инвентарь:\n{list_things}")
+
+    def help(self, update, context):
+        pass
+
     def give_command(self, update, context):
-        if self.show_node:
+        if self.show_node and self.quest_run:
             self.show_node = False
             update.message.reply_text(f"Текущее положение: {self.now_node['name']}\n"
                                       f"Сообщение: {self.now_node['message']}")
@@ -68,7 +76,7 @@ class GameBot:
 
             if self.now_node["help"]:
                 update.message.reply_text(f"Подсказка: {self.now_node['help']}")
-        else:
+        elif self.quest_run:
             self.function_data[self.now_node["type"]][0](update, context, update.message.text)
 
     # Take answer ---------------------------------------------------------------------------------
@@ -89,6 +97,16 @@ class GameBot:
                     json.dump(self.save_data, file)
                     file.close()
 
+            elif key_next_node == "take":
+                print(self.inventory)
+                object_take = self.now_node["answers"][answer]["object"]
+                if object_take in self.inventory:
+                    update.message.reply_text(f"Предмет '{object_take}' "
+                                              f"уже находится в вашем инвентаре.")
+                else:
+                    self.inventory.append(object_take)
+                    update.message.reply_text(f"Предмет '{object_take}' добавлен в ваш инвентарь.")
+
             elif key_next_node != "null":
                 self.now_node = self.chapter_data[key_next_node]
                 self.now_node_name = key_next_node
@@ -96,6 +114,7 @@ class GameBot:
                 self.give_command(update, context)
             else:
                 update.message.reply_text("Квест закончен!")
+                self.quest_run = False
 
     def password_take_answer(self, update, context, answer):
         if answer == "отмена":
@@ -114,14 +133,21 @@ class GameBot:
                 self.give_command(update, context)
             else:
                 update.message.reply_text("Квест закончен!")
+                self.quest_run = False
 
     def use_take_answer(self, update, context, answer):
         if answer == "1" and self.now_node["need_thing"] in self.inventory:
             self.inventory.remove(self.now_node["need_thing"])
-            self.now_node_name = self.now_node["next_node"]
-            self.now_node = self.chapter_data[self.now_node["next_node"]]
-            self.show_node = True
-            self.give_command(update, context)
+            update.message.reply_text(f"Предмет '{self.now_node['need_thing']}' использован.")
+            if self.now_node["next_node"] != "null":
+                self.now_node_name = self.now_node["next_node"]
+                self.now_node = self.chapter_data[self.now_node["next_node"]]
+                self.show_node = True
+                self.give_command(update, context)
+            else:
+                update.message.reply_text("Квест закончен!")
+                self.quest_run = False
+
         elif answer == "1":
             update.message.reply_text("У вас нет подходящего предмета!")
         elif answer == "2":
@@ -145,6 +171,8 @@ class GameBot:
 
     def main(self):
         self.dp.add_handler(CommandHandler("start", self.start))
+        self.dp.add_handler(CommandHandler("i", self.get_inventory))
+        self.dp.add_handler(CommandHandler("help", self.help))
         text_handler = MessageHandler(Filters.text & ~Filters.command, self.give_command)
         self.dp.add_handler(text_handler)
 
