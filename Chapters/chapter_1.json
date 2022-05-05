@@ -15,6 +15,10 @@
       "3": {
         "text": "Хочу ввести пароль",
         "next_node": "node_password"
+      },
+      "4": {
+        "text": "Открыть дверь",
+        "next_node": "use_node"
       }
     },
     "help": "Введите номер выбранного действия"
@@ -52,6 +56,27 @@
       "2": {
         "text": "Передумать",
         "next_node": "node_1"
+      },
+      "3": {
+        "text": "Сохраниться",
+        "next_node": "save"
+      }
+    },
+    "help": ""
+  },
+  "use_node": {
+    "name": "Key Use",
+    "type": "Use_node",
+    "message": "Дверь заперта ключём.\nНайдите ключ 'key_1'",
+    "need_thing": "key_1",
+    "next_node": "node_1",
+    "prev_node": "head",
+    "answers":{
+      "1": {
+        "text": "Использовать предмет"
+      },
+      "2": {
+        "text": "Уйти"
       }
     },
     "help": ""
