@@ -137,7 +137,7 @@ class GameBot:
 
     def use_take_answer(self, update, context, answer):
         if answer == "1" and self.now_node["need_thing"] in self.inventory:
-            self.inventory.remove(self.now_node["need_thing"])
+            # self.inventory.remove(self.now_node["need_thing"])
             update.message.reply_text(f"Предмет '{self.now_node['need_thing']}' использован.")
             if self.now_node["next_node"] != "null":
                 self.now_node_name = self.now_node["next_node"]
