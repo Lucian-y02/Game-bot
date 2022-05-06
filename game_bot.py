@@ -117,7 +117,7 @@ class GameBot:
                 self.quest_run = False
 
     def password_take_answer(self, update, context, answer):
-        if answer == "отмена":
+        if answer == "lv":
             self.now_node_name = self.now_node["prev_node"]
             self.now_node = self.chapter_data[self.now_node["prev_node"]]
             self.show_node = True
