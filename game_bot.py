@@ -64,7 +64,9 @@ class GameBot:
         update.message.reply_text(f"Инвентарь:\n{list_things}")
 
     def help(self, update, context):
-        pass
+        update.message.reply_text("/start - начать квест\n"
+                                  "/start <код> - начать квест с сохранения\n"
+                                  "/i - инвентарь")
 
     def give_command(self, update, context):
         if self.show_node and self.quest_run:
